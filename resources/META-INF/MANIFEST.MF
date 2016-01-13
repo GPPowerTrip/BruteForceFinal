@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Command: bruteforce
+ArthurPlug: org.powertrip.excalibot.common.plugins.bruteforce.Server
+KnightPlug: org.powertrip.excalibot.common.plugins.bruteforce.Bot
+
+
