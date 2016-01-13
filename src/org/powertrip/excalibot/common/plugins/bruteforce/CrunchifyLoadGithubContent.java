@@ -1,6 +1,4 @@
-package org.powertrip.excalibot.common.plugins.bruteforce; /**
- * Created by Ricardo on 12/01/2016.
- */
+package org.powertrip.excalibot.common.plugins.bruteforce;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -14,9 +12,14 @@ import java.util.Map;
  */
 
 public class CrunchifyLoadGithubContent {
+    String link = "https://raw.githubusercontent.com/GPPowerTrip/SecLists/master/Passwords/500-worst-passwords.txt";
+
+    public CrunchifyLoadGithubContent(String link){
+        this.link=link;
+    }
 
     public String Crunchify() throws Throwable {
-        String link = "https://raw.githubusercontent.com/GPPowerTrip/SecLists/master/Passwords/500-worst-passwords.txt";
+
         URL crunchifyUrl = new URL(link);
         HttpURLConnection crunchifyHttp = (HttpURLConnection) crunchifyUrl.openConnection();
         Map<String, List<String>> crunchifyHeader = crunchifyHttp.getHeaderFields();
@@ -33,8 +36,8 @@ public class CrunchifyLoadGithubContent {
         }
 
         InputStream crunchifyStream = crunchifyHttp.getInputStream();
-        String crunchifyResponse = crunchifyGetStringFromStream(crunchifyStream);
-        return crunchifyResponse;
+        return crunchifyGetStringFromStream(crunchifyStream);
+
     }
 
     // ConvertStreamToString() Utility - we name it as crunchifyGetStringFromStream()
