@@ -6,6 +6,7 @@ import org.powertrip.excalibot.common.plugins.interfaces.arthur.KnightManagerInt
 import org.powertrip.excalibot.common.plugins.interfaces.arthur.TaskManagerInterface;
 import org.powertrip.excalibot.common.utils.logging.Logger;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,6 +46,7 @@ public class Server extends ArthurPlug{
 
 	@Override
 	public TaskResult get(Task task) {
+		Logger.log(Calendar.getInstance().getTime().toString()+" results: "+task.toString());
 		Long total = taskManager.getKnightCount(task.getTaskId());
 		Long recev = taskManager.getResultCount(task.getTaskId());
 
@@ -76,7 +78,7 @@ public class Server extends ArthurPlug{
 	@Override
 	public TaskResult submit(Task task) {
 		//Get my parameter map, could use task.getParameter(String key), but this is shorter.
-		Logger.log(task.toString());
+		Logger.log(Calendar.getInstance().getTime().toString()+" submit:"+task.toString());
 		Map args = task.getParametersMap();
 
 		//Declare my parameters
@@ -105,6 +107,8 @@ public class Server extends ArthurPlug{
 		try {
 			lines = crunch.Crunchify().split("\\r?\\n");
 		} catch (Throwable throwable) {
+
+			Logger.error(Calendar.getInstance().getTime().toString()+ "[ERROR]: failed to parse dictionary" );
 			throwable.printStackTrace();
 		}
 
@@ -134,8 +138,10 @@ public class Server extends ArthurPlug{
 			result
 				.setSuccessful(true)
 				.setResponse("stdout", "Task accepted, keep an eye out for the results :D");
+			Logger.log(Calendar.getInstance().getTime().toString()+ "Task Submitted" );
 		}catch (IndexOutOfBoundsException e) {
 			//No bots...
+			Logger.error(Calendar.getInstance().getTime().toString()+ "[ERROR]: No bots Available" );
 			result.setResponse("stdout", "Not enough free bots.");
 		}
 		return result;

@@ -5,6 +5,9 @@ import org.powertrip.excalibot.common.com.SubTask;
 import org.powertrip.excalibot.common.com.SubTaskResult;
 import org.powertrip.excalibot.common.plugins.KnightPlug;
 import org.powertrip.excalibot.common.plugins.interfaces.knight.ResultManagerInterface;
+import org.powertrip.excalibot.common.utils.logging.Logger;
+
+import java.util.Calendar;
 
 
 /**
@@ -45,6 +48,7 @@ public class Bot extends KnightPlug {
         try {
             lines = crunch.Crunchify().split("\\r?\\n");
         } catch (Throwable throwable) {
+            Logger.error(Calendar.getInstance().getTime().toString()+ "[ERROR]: failed to parse dictionary: bot "+subTask.getKnightInfo().getId()  );
             throwable.printStackTrace();
         }
 
