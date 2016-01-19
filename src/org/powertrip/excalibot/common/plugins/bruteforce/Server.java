@@ -66,8 +66,10 @@ public class Server extends ArthurPlug{
                 .map(subTaskResult1 -> subTaskResult1.getResponse("correctPass"))
                 .collect(Collectors.toList());
 
-
-		return result.setResponse("stdout", "The password is: " + passwords.get(0));
+		if (passwords.isEmpty()) {
+			return result.setResponse("stdout", "No password found");
+		}
+		else return result.setResponse("stdout", "The password is: " + passwords.get(0));
 	}
 
 	@Override
